@@ -17,10 +17,10 @@ Qalyptus On-demand extension for Qlik Sense
 3.Configure Qalyptus Server host name, such as http://qalyptus.test.local:3994
 
 ### Windows credentials
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/1-1.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/1-1.png)
 
 ###  Qalyptus credentials
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/1-1-2.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/1-1-2.png)
 
 4.Pick your report in "Report Configuration" Section and choose a project from the following dropbox
 
@@ -28,41 +28,41 @@ Qalyptus On-demand extension for Qlik Sense
 
 6.And choose your expected export format
 
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/1-2.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/1-2.png)
 
 7.Go to Analysis Mode and Press the button to start report generation
 
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/1-3.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/1-3.png)
 
 8.Popup window will show up and auto pulling the status of the generation.
 
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/1-4.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/1-4.png)
 
 9.When reported is generated on Qalyptus server, the download button will appear. Click the button to download your report.
 
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/1-5.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/1-5.png)
 
 ## Self-Service Report
 
 1.A "Qalyptus Reports" button is appended in the top when this extension is used. 
 
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/2-1.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/2-1.png)
 
 2.A "New Report" button is displayed at the bottom. That's for self-service report generation.
 
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/2-2.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/2-2.png)
 
 3.Press the button and all 'On-Demand' reports (that current user is allowed to see) will be listed.
 
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/2-3.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/2-3.png)
 
 4.Then choose your desired report format
 
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/2-4.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/2-4.png)
 
 5.Then it will come back to the Export overview and wait for the report to be accomplished.
 
-![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/master/tutorial/2-5.png)
+![alt tag](https://github.com/qalyptus/qalyptus-sense-on-demand/blob/master/tutorial/2-5.png)
 
 ## Limitations
 1.(Due to techical reasons) The self-service button will not show up until you get into a sheet contains this extension. And it will always stay there until you refresh your page. And it's not working when you navigate to other sheets that don't contain this extension. This will be fixed in following release
@@ -88,3 +88,6 @@ Qalyptus On-demand extension for Qlik Sense
 For any questions and support, please feel free to contact:
 
 Qalyptus support (support@qalyptus.com)
+
+## Info
+This extension is forked from bohua/nprinting-sense-on-demand 
