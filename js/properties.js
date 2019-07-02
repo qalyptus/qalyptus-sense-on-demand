@@ -9,17 +9,17 @@ var Authentication = {
 			label: "Type",
 			ref: "npsod.conn.auth",
 			options: [{
+				value: "ntlm",
+				label: "Windows",
+				tooltip: "Authenticate with your Windows credentials"
+			},
+			{
 				value: "jwt",
 				label: "Qalyptus",
 				tooltip: "Authenticate with Qalyptus credentials"
 			}
-				, {
-				value: "ntlm",
-				label: "Windows",
-				tooltip: "Authenticate with your Windows credentials"
-			}
 			],
-			defaultValue: "jwt"
+			defaultValue: "ntlm"
 		},
 		server: {
 			ref: "npsod.conn.server",
@@ -51,10 +51,7 @@ var Authentication = {
 					url: data.npsod.conn.server + '/api/v1/login',
 					method: 'POST',
 					contentType: 'application/json',
-					data: JSON.stringify({ username: data.npsod.conn.username, password: data.npsod.conn.password }),
-					xhrFields: {
-						withCredentials: data.npsod.conn.auth === 'ntlm'
-					}
+					data: JSON.stringify({ username: data.npsod.conn.username, password: data.npsod.conn.password })
 				}).then(function (res) {
 					localStorage.setItem("token", res.data.token);
 					localStorage.setItem("refreshToken", res.data.refreshToken);
@@ -82,14 +79,13 @@ var ReportSection = {
 					url: data.npsod.conn.server + '/api/v1/projects',
 					method: 'GET',
 					xhrFields: {
-						withCredentials: data.npsod.conn.auth === 'ntlm'
+						withCredentials: data.npsod.conn.auth == 'ntlm'
 					},
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader("Content-Type", "application/json");
-						xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
-					},
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader("Authorization", "Bearer" + " " + localStorage.getItem("token"));
+						if (data.npsod.conn.auth == 'jwt') {
+							xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+						}
 					},
 					statusCode: {
 						401: function (xhr) {
@@ -117,10 +113,13 @@ var ReportSection = {
 					url: requestUrl,
 					method: 'GET',
 					xhrFields: {
-						withCredentials: data.npsod.conn.auth === 'ntlm'
+						withCredentials: data.npsod.conn.auth == 'ntlm'
 					},
 					beforeSend: function (xhr) {
-						xhr.setRequestHeader("Authorization", "Bearer" + " " + localStorage.getItem("token"));
+						xhr.setRequestHeader("Content-Type", "application/json");
+						if (data.npsod.conn.auth == 'jwt') {
+							xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+						}
 					},
 					statusCode: {
 						401: function (xhr) {
@@ -144,15 +143,17 @@ var ReportSection = {
 			ref: "npsod.conn.exportFormat",
 			options: function (data) {
 				var requestUrl = data.npsod.conn.server + '/api/v1/reports' + '/' + data.npsod.conn.report;
-
 				return $.ajax({
 					url: requestUrl,
 					method: 'GET',
 					xhrFields: {
-						withCredentials: false
+						withCredentials: data.npsod.conn.auth == 'ntlm'
 					},
 					beforeSend: function (xhr) {
-						xhr.setRequestHeader("Authorization", "Bearer" + " " + localStorage.getItem("token"));
+						xhr.setRequestHeader("Content-Type", "application/json");
+						if (data.npsod.conn.auth == 'jwt') {
+							xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+						}
 					},
 					statusCode: {
 						401: function (xhr) {

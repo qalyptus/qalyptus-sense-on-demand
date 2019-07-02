@@ -251,12 +251,13 @@ define([
                             withCredentials: useCredentials
                         },
                         beforeSend: function (xhr) {
-                            //xhr.setRequestHeader("Content-Type", "application/json");
-                            xhr.setRequestHeader("Authorization", "Bearer" + " " + localStorage.getItem("token"));
+                            if (useCredentials == false) {
+                                xhr.setRequestHeader("Content-Type", "application/json");
+                                xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                            }
                         },
                         statusCode: {
                             417: function (xhr) {
-                                console.log(xhr.statusText)
                                 refreshToken(conn, localStorage.getItem("refreshToken"));
                             },
                             401: function (xhr) {
@@ -274,15 +275,16 @@ define([
                 url: requestUrl,
                 method: 'GET',
                 xhrFields: {
-                    withCredentials: conn.withCredentials
+                    withCredentials: conn.auth == 'ntlm'
                 },
                 beforeSend: function (xhr) {
-                    //xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer" + " " + localStorage.getItem("token"));
+                    if (conn.auth != 'ntlm') {
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                    }
                 },
                 statusCode: {
                     417: function (xhr) {
-                        console.log(xhr.statusText)
                         refreshToken(conn, localStorage.getItem("refreshToken"));
                     },
                     401: function (xhr) {
@@ -298,15 +300,16 @@ define([
                 url: requestUrl,
                 method: 'GET',
                 xhrFields: {
-                    withCredentials: conn.withCredentials
+                    withCredentials: conn.auth == 'ntlm'
                 },
                 beforeSend: function (xhr) {
-                    //xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer" + " " + localStorage.getItem("token"));
+                    if (conn.auth != 'ntlm') {
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                    }
                 },
                 statusCode: {
                     417: function (xhr) {
-                        console.log(xhr.statusText)
                         refreshToken(conn, localStorage.getItem("refreshToken"));
                     },
                     401: function (xhr) {
@@ -318,20 +321,20 @@ define([
 
         function getTasks(conn) {
             var requestUrl = conn.server + '/api/v1/ondemand/requests' + '?projectId=' + conn.app;
-
             return $.ajax({
                 url: requestUrl,
                 method: 'GET',
                 xhrFields: {
-                    withCredentials: conn.withCredentials
+                    withCredentials: conn.auth == 'ntlm'
                 },
                 beforeSend: function (xhr) {
-                    //xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer" + " " + localStorage.getItem("token"));
+                    if (conn.auth != 'ntlm') {
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                    }
                 },
                 statusCode: {
                     417: function (xhr) {
-                        console.log(xhr.statusText)
                         refreshToken(conn, localStorage.getItem("refreshToken"));
                     },
                     401: function (xhr) {
@@ -347,15 +350,16 @@ define([
                 url: requestUrl,
                 method: 'GET',
                 xhrFields: {
-                    withCredentials: conn.withCredentials
+                    withCredentials: conn.auth == 'ntlm'
                 },
                 beforeSend: function (xhr) {
-                    //xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer" + " " + localStorage.getItem("token"));
+                    if (conn.auth != 'ntlm') {
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                    }
                 },
                 statusCode: {
                     417: function (xhr) {
-                        console.log(xhr.statusText)
                         refreshToken(conn, localStorage.getItem("refreshToken"));
                     },
                     401: function (xhr) {
@@ -375,15 +379,16 @@ define([
                 },
                 method: 'DELETE',
                 xhrFields: {
-                    withCredentials: conn.withCredentials
+                    withCredentials: conn.auth == 'ntlm'
                 },
                 beforeSend: function (xhr) {
-                    //xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer" + " " + localStorage.getItem("token"));
+                    if (conn.auth != 'ntlm') {
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                    }
                 },
                 statusCode: {
                     417: function (xhr) {
-                        console.log(xhr.statusText)
                         refreshToken(conn, localStorage.getItem("refreshToken"));
                     },
                     401: function (xhr) {
@@ -393,10 +398,38 @@ define([
             });
         }
 
-        function downloadTask(conn, taskId) {
+        function downloadTask(conn, taskId, title) {
             var requestUrl = conn.server + '/api/v1/ondemand/requests/' + taskId + '/result';
-            document.getElementById('download').src = requestUrl;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", requestUrl, true);
+            xhr.responseType = "blob";
+            if (conn.auth == 'ntlm') {
+                xhr.withCredentials = true;
+            }
+            else {
+                xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+            }
+            xhr.onload = function (oEvent) {
+                var blob = xhr.response;
+                saveBolb(blob, title);
+            };
+
+            xhr.send();
         }
+
+        var saveBolb = (function () {
+            var a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            return function (blob, fileName) {
+                url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            };
+        }());
 
         function getImg(type) {
             switch (type) {
@@ -512,7 +545,7 @@ define([
                         conn: conn,
                         report: conn.report,
                         format: conn.exportFormat,
-                        withCredentials: conn.auth === 'ntlm'
+                        withCredentials: conn.auth == 'ntlm'
                     };
 
                     var url = window.location.href;
@@ -538,20 +571,12 @@ define([
                             }
                         });
 
-                        var pullTaskHandler =
+                        var pullTaskHandler = $interval(function () {
                             getTasks(conn).then(function (response) {
                                 $scope.taskList = response.data;
                                 $scope.$apply();
                             });
-
-                        if ($scope.taskList) {
-                            pullTaskHandler = $interval(function () {
-                                getTasks(conn).then(function (response) {
-                                    $scope.taskList = response.data;
-                                    $scope.$apply();
-                                });
-                            }, 1000);
-                        }
+                        }, 1000);
 
                         $scope.go2OverviewStage(conn);
 
@@ -588,7 +613,7 @@ define([
                         conn: conn,
                         report: $scope.currReport.id,
                         format: format,
-                        withCredentials: conn.auth === 'ntlm'
+                        withCredentials: conn.auth == 'ntlm'
                     };
 
                     doExport(options).then(function () {
@@ -602,8 +627,8 @@ define([
                     });
                 };
 
-                $scope.downloadTask = function (taskId) {
-                    downloadTask(conn, taskId);
+                $scope.downloadTask = function (taskId, title) {
+                    downloadTask(conn, taskId, title);
                 };
 
                 //Selection Listener
