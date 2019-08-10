@@ -9,9 +9,11 @@
 				<li class="list-group-item npsod-task-list-item" ng-repeat="task in taskList">
 					<h4 class="list-group-item-heading bold">{{task.title}} <small>{{task.createdDate | date:'medium'}}</small></h4>
 					
-					<span class="glyphicon glyphicon-remove-circle npsod-list-menu-icon pointer" ng-click="deleteTask(task.id)"></span>
-					<span ng-if="task.status=='completed'" class="npsod-list-menu-icon glyphicon glyphicon-save pointer" ng-click="downloadTask(task.id, task.title)"></span>
-					<img class="npsod-list-loading-icon" ng-src="{{getImg('LOADING')}}" ng-if="task.status=='running'||task.status=='queued'">
+					<span class="glyphicon glyphicon-remove-circle npsod-list-menu-icon pointer" ng-click="deleteTask(task.id)" title="Delete"></span>
+					<span ng-if="task.status=='completed'" class="npsod-list-menu-icon glyphicon glyphicon-save pointer" ng-click="downloadTask(task.id, task.title)" title="Download"></span>
+					<img class="npsod-list-loading-icon" ng-src="{{getImg('LOADING')}}" ng-if="task.status=='running'||task.status=='queued'" title="{{task.status}}">
+					<img  class="npsod-list-loading-icon" ng-src="{{getImg('ERROR')}}" ng-if="task.status=='error'||task.status=='stopped'" title="{{task.status}}">
+
 				</li>
 			</ul>
 		</div>

@@ -483,6 +483,9 @@ define([
 
                 case 'LOADING':
                     return '../extensions/qalyptus-sense-on-demand/images/loading-gear.gif';
+                    
+                case 'ERROR':
+                    return '../extensions/qalyptus-sense-on-demand/images/error.svg';
                 default:
                     return '../extensions/qalyptus-sense-on-demand/images/icon-template-pp.png';
             }
