@@ -85,9 +85,7 @@ Qalyptus On-demand extension for Qlik Sense
 
 ## Contact
 
-For any questions and support, please feel free to contact:
-
-Qalyptus support (support@qalyptus.com)
+For any questions and support, please feel free to contact us.
 
 ## Info
 This extension is forked from bohua/nprinting-sense-on-demand 
